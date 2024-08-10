@@ -47,7 +47,6 @@ const VistaContinua = () => {
             } catch (error) {
                 setError('Error al obtener los datos de escolaridad: ' + error.message);
             }
-
         };
 
         const obtenerDatosExperiencia = async () => {
@@ -65,7 +64,7 @@ const VistaContinua = () => {
                 const response = await axios.get(`http://localhost:4000/habilidades/${id}`);
                 setDatosHabilidades(response.data);
             } catch (error) {
-                setError('Error al obtener los datos de experiencia: ' + error.message);
+                setError('Error al obtener los datos de habilidades: ' + error.message);
             } finally {
                 setLoading(false);
             }
@@ -75,7 +74,7 @@ const VistaContinua = () => {
                 const response = await axios.get(`http://localhost:4000/proyectos/${id}`);
                 setDatosProyectos(response.data);
             } catch (error) {
-                setError('Error al obtener los datos de experiencia: ' + error.message);
+                setError('Error al obtener los datos de proyectos: ' + error.message);
             } finally {
                 setLoading(false);
             }
@@ -85,7 +84,7 @@ const VistaContinua = () => {
                 const response = await axios.get(`http://localhost:4000/idiomas/${id}`);
                 setDatosIdiomas(response.data);
             } catch (error) {
-                setError('Error al obtener los datos de experiencia: ' + error.message);
+                setError('Error al obtener los datos de idiomas: ' + error.message);
             } finally {
                 setLoading(false);
             }
@@ -95,7 +94,7 @@ const VistaContinua = () => {
                 const response = await axios.get(`http://localhost:4000/hob/${id}`);
                 setDatosHobbies(response.data);
             } catch (error) {
-                setError('Error al obtener los datos de experiencia: ' + error.message);
+                setError('Error al obtener los datos de hobbies: ' + error.message);
             } finally {
                 setLoading(false);
             }
@@ -105,7 +104,7 @@ const VistaContinua = () => {
                 const response = await axios.get(`http://localhost:4000/redes/${id}`);
                 setDatosRedes(response.data);
             } catch (error) {
-                setError('Error al obtener los datos de experiencia: ' + error.message);
+                setError('Error al obtener los datos de redes sociales: ' + error.message);
             } finally {
                 setLoading(false);
             }
@@ -115,7 +114,7 @@ const VistaContinua = () => {
                 const response = await axios.get(`http://localhost:4000/cert/${id}`);
                 setDatoCertificaciones(response.data);
             } catch (error) {
-                setError('Error al obtener los datos de experiencia: ' + error.message);
+                setError('Error al obtener los datos de certificaciones: ' + error.message);
             } finally {
                 setLoading(false);
             }
@@ -130,9 +129,18 @@ const VistaContinua = () => {
         obtenerDatosHobbies();
         obtenerDatosRedes();
         obtenerDatosCertificaciones();
-
-
     }, [id]);
+
+    const generarPDF = () => {
+        var opt = {
+            margin:       0.1,
+            filename:     `cv_${datosGenerales?.apellido_paterno}_${datosGenerales?.apellido_materno}_${Date.now()}.pdf`,
+            jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+          };
+
+        const element = document.getElementById('vista-continua');
+        html2pdf().from(element).set(opt).save();
+    };
 
     if (loading) {
         return <p>Cargando...</p>;
@@ -142,11 +150,20 @@ const VistaContinua = () => {
         return <p>{error}</p>;
     }
 
+    const handleBack = () => {
+        navigate('/curriculums'); // Reemplaza '/ruta-deseada' con la ruta a la que deseas navegar
+    };
+
+
 
     return (
         <>
-            <div className="">
-                <div className="bg-white  text-zinc-800 shadow-md p-5 w-full ">
+            <div>
+            <Button onClick={generarPDF} className='bg-violet-600 mb-5 shadow-xl font-bold hover:bg-violet-800 text-white px-4 py-2 rounded'>Generar PDF</Button>
+            <Button onClick={handleBack} className='bg-red-600 mb-5 mx-2 shadow-xl font-bold hover:bg-red-800 text-white py-2 px-4 rounded'>Regresar al inicio</Button>
+            </div>
+            <div className="" id="vista-continua" >
+                <div  className="bg-white  text-zinc-800 shadow-md p-5 w-full ">
                     <h1 className="text-3xl font-bold mb-4">
                         {datosGenerales?.nombre} {datosGenerales?.apellido_paterno} {datosGenerales?.apellido_materno}
                     </h1>
@@ -306,7 +323,7 @@ const VistaContinua = () => {
                         </div>
                     </div>
                     <div className='w-2/3'>
-                        <div className="bg-zinc-100 shadow-md p-8">
+                        <div className="bg-gray-400 shadow-md p-8">
                             <h2 className="text-2xl font-bold mb-4"><FontAwesomeIcon icon={faAddressCard} /> Experiencia Profesional</h2>
                             <ul className="mb-4">
                                 <li>
@@ -320,7 +337,7 @@ const VistaContinua = () => {
                                             </thead>
                                             <tbody className='text-center'>
                                                 {datosExperiencia.map((datosExperiencia, index) => (
-                                                    <tr key={index} className={(index % 2 === 0) ? 'bg-zinc-200' : ''}>
+                                                    <tr key={index} className={(index % 2 === 0) ? 'bg-zinc-500 ' : ''}>
                                                         <td className='w-1/4 font-semibold '>
                                                             <h1>{`${datosExperiencia?.fecha_inicio} - ${datosExperiencia?.fecha_termino}`}</h1>
                                                         </td>
@@ -342,7 +359,7 @@ const VistaContinua = () => {
                                 </li>
                             </ul>
                         </div>
-                        <div className="bg-gray-100 shadow-md p-8">
+                        <div className="bg-gray-400 shadow-md p-8">
                             <h2 className="text-2xl font-bold mb-4"><FontAwesomeIcon icon={faGraduationCap} /> Educación</h2>
                             <ul className="mb-4">
                                 <li>
@@ -356,7 +373,7 @@ const VistaContinua = () => {
                                             </thead>
                                             <tbody className='text-center'>
                                                 {datosEscolaridad.map((datosEscolaridad, index) => (
-                                                    <tr key={index} className={(index % 2 === 0) ? 'bg-zinc-200' : ''}>
+                                                    <tr key={index} className={(index % 2 === 0) ? 'bg-zinc-500' : ''}>
                                                         <td className='w-1/4 font-semibold '>
                                                             <h1>{`${datosEscolaridad?.fecha_inicio} - ${datosEscolaridad?.fecha_graduacion}`}</h1>
                                                         </td>
@@ -374,7 +391,7 @@ const VistaContinua = () => {
                                 </li>
                             </ul>
                         </div>
-                        <div className="bg-gray-100 shadow-md p-8">
+                        <div className="bg-gray-400 shadow-md p-8">
                             <h2 className="text-2xl font-bold mb-4"><FontAwesomeIcon icon={faGraduationCap} /> Proyectos Profesionales</h2>
                             <ul className="mb-4">
                                 <li>
@@ -388,7 +405,7 @@ const VistaContinua = () => {
                                             </thead>
                                             <tbody className='text-center'>
                                                 {datosProyectos.map((datosProyectos, index) => (
-                                                    <tr key={index} className={(index % 2 === 0) ? 'bg-zinc-200' : ''}>
+                                                    <tr key={index} className={(index % 2 === 0) ? 'bg-zinc-500' : ''}>
                                                         <td className='w-1/4 font-semibold '>
                                                             <h1>{datosProyectos.nombre_proyecto}</h1>
                                                         </td>

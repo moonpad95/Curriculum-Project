@@ -6,7 +6,7 @@ import NotFound from "./pages/NotFound";
 import { TaskContextProvider } from "./context/TaskProvider";
 import DatosGenerales from "./components/cv";
 import Escolaridades from "./components/Escolaridades";
-
+import ProtectedRoute from "./components/protectedRoute";
 import Navbar from "./components/Navbar";
 import VistaTareas from "./components/continue";
 import VistaContinua from "./components/continuar";
@@ -22,21 +22,26 @@ import DeleteDatosGenerales from "./components/delete";
 import VistaCurri from "./pages/VerCurriculum";
 import HabilidadesEdit from "./components/updates/habilidadesUpdate";
 import Promo from "./pages/promo";
+import Login from "./pages/login";
 
 function App() {
   return (
+
+    
     <div className="bg-gray-300 h-screen">
+      
       <Navbar />
       <div className=" mx-auto">
         <TaskContextProvider>
           <Routes>
-            <Route path="/" element={<TasksPage />} />
-            <Route path="/new" element={<TaskForm />} />
-            <Route path="/edit/:id" element={<TaskForm />} />
+          <Route path="/login" element={<Login />} />
+            <Route path="/" element={<ProtectedRoute><TasksPage /></ProtectedRoute> } />
+            <Route path="/new" element={<ProtectedRoute><TaskForm /></ProtectedRoute>} />
+            <Route path="/edit/:id" element={ <TaskForm />} />
             <Route path="*" element={<NotFound />} />
-            <Route path="/datos-generales" element={<DatosGenerales />} />
-            <Route path="/carrusel" element={<Promo />} />
-            <Route path="/curriculum" element={<VistaContinua />} />
+            <Route path="/datos-generales" element={<ProtectedRoute><DatosGenerales /></ProtectedRoute>} />
+            <Route path="/carrusel" element={<ProtectedRoute><Promo /></ProtectedRoute>} />
+            <Route path="/curriculum" element={<ProtectedRoute><VistaContinua /></ProtectedRoute>} />
             <Route path='curriculum/:id'>
               <Route path='escolaridad' element={<Escolaridades />}></Route>
               <Route path='habilidades' element={<Habilidades />}></Route>
@@ -46,7 +51,7 @@ function App() {
               <Route path='redes' element={<Redes />}></Route>
               <Route path='certificados' element={<Certificados />}></Route>
               <Route path='idiomas' element={<Idiomas />}></Route>
-              <Route path='ver' element={<VerCurriculum />}></Route>
+              <Route path='ver' element={<ProtectedRoute><VerCurriculum /></ProtectedRoute>}></Route>
               <Route path='delete' element={<DeleteDatosGenerales />}></Route>
               <Route path='update' element={<VistaCurri />}></Route>
 
@@ -58,7 +63,7 @@ function App() {
             <Route path='modify/:id/'>
                 <Route path="habilidades"  element={<HabilidadesEdit />}></Route>
               </Route>
-            <Route path="/curriculums" element={<VistaTareas />} ></Route>
+            <Route path="/curriculums" element={<ProtectedRoute><VistaTareas /></ProtectedRoute>} ></Route>
             {/* <Route path='/curriculums/:id/delete' element={<DeleteDatosGenerales/>}></Route> */}
 
           </Routes>

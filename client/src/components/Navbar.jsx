@@ -1,7 +1,17 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import cv from "./../pages/cv2.png"
 
 function Navbar() {
+  const [username, setUsername] = useState('');
+
+  useEffect(() => {
+    const storedUsername = localStorage.getItem('username');
+    if (storedUsername) {
+      setUsername(storedUsername);
+      console.log(username)
+    }
+  }, []);
   return (
     <div className="bg-neutral-800 flex justify-between px-20 py-4">
       <Link to="/" className="text-white font-bold">
@@ -24,6 +34,14 @@ function Navbar() {
           <li>
             <Link to="/curriculums" className="bg-purple-600 px-2 py-1 rounded-lg font-bold text-white hover:bg-purple-800">Ver un curriculum registrado</Link>
           </li>
+          <li>
+          {username ? (
+           <p className="py-1 font-bold text-indigo-200 ml-5 shadow-xl">  Bienvenido, {username}</p>
+          ):(
+            <p className="py-1 font-bold text-indigo-200 ml-5 shadow-xl"> Favor de iniciar sesion</p>
+          )}
+          </li>
+
         </ul>
       </div>
 

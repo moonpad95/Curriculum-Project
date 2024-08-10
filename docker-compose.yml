@@ -1,0 +1,40 @@
+version: '3.8'
+services:
+  backend:
+    build: ./server
+    ports:
+      - "4000:4000"
+    networks:
+      - app-network
+    command: npm start
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: luna
+      DB_PASSWORD: 123456
+      DB_NAME: curriculum
+
+  mysql:
+    image: mysql:8.2
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'curriculum'
+      MYSQL_USER: 'lunq'
+      MYSQL_PASSWORD: '123456'
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    ports:
+      - "3307:3307"
+    networks:
+      - app-network
+
+  frontend:
+    build: ./client
+    ports:
+      - "5173:5173"
+    networks:
+      - app-network
+    command: npm run dev # Asegúrate de que este comando esté en tu package.json
+
+networks:
+  app-network:
+    driver: bridge

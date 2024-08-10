@@ -12,6 +12,7 @@ const DatosGenerales = () => {
         fecha_nacimiento: '',
         direccion: '',
         correo: '',
+        password: '',
         telefono: '',
         url_webpage: ''
     };
@@ -40,13 +41,13 @@ const DatosGenerales = () => {
 
 
     const handleSubmit = (e) => {
+        console.log('datos:', formData)
         e.preventDefault();
         //Prevenir el envio de datos si el usuario no tiene 18 años
         if (!validarEdad(formData.fecha_nacimiento)) {
             toast.error("Debes tener al menos 18 años de edad");
             return;
         }
-
         axios.post('http://localhost:4000/tasks', formData)
             .then(response => {
                 console.log('Datos enviados correctamente');
@@ -122,6 +123,10 @@ const DatosGenerales = () => {
                             <input type="url" placeholder="Ingresa el URL de tu portafolio de experiencia" name="url_webpage" value={formData.url_webpage} onChange={handleChange} className="w-full px-4 py-2 border rounded focus:outline-none focus:border-blue-500" />
                         </div>
                     </div>
+                    <div>
+                            <label className="block mb-1 text-white">Contrasena:</label>
+                            <input type="password" placeholder="Ingresa tu contrasena" name="password" value={formData.password} onChange={handleChange} className="w-full px-4 py-2 border rounded focus:outline-none focus:border-blue-500" required />
+                        </div>
 
                     <div className="flex justify-center mt-6">
                         <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-4">Aceptar</button>

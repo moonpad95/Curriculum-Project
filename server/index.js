@@ -40,4 +40,4 @@ app.use(redesRoutes);
 app.use(express.static(join(__dirname, '../client/dist')))
 
 app.listen(PORT);
-console.log(`Server is listening on port ${PORT}`);
+console.log(`Servidor listo por puerto:  ${PORT}`);
